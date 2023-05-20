@@ -1,10 +1,14 @@
 "use client";
 import { Menu } from "@/app/menu/Menu";
-import { Map } from "@/app/map/Map";
 import { useRef, useState } from "react";
 import { MapObject } from "@/app/map/MapObject";
 import { NewMapObject } from "@/app/map/NewMapObject";
 import { MenuItemContent } from "@/app/menu/MenuItemContent";
+import dynamic from "next/dynamic";
+
+const Map = dynamic(() => import("./map/Map").then((m) => m.Map), {
+  ssr: false,
+});
 
 export default function Home() {
   const [items, setItems] = useState([] as MapObject[]);
@@ -14,6 +18,7 @@ export default function Home() {
     const newObject: MapObject = {
       points: item.points,
       key: (++objectCounter.current).toString(10),
+      color: item.color,
     };
     setItems((prevItems) => [...prevItems, newObject]);
   };
@@ -33,8 +38,8 @@ export default function Home() {
           onRemove={mapObjectRemoved}
         />
       </div>
-      <div className="flex-grow">
-        <Map mapObjectCreated={mapObjectCreated} />
+      <div className="flex-grow min-h-fit">
+        <Map mapObjects={items} mapObjectCreated={mapObjectCreated} />
       </div>
     </main>
   );

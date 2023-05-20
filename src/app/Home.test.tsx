@@ -15,7 +15,7 @@ describe("Home page", () => {
   test("double clicking on the map adds menu item", async () => {
     render(<Home />);
 
-    const map = screen.getByRole("map");
+    const map = await screen.findByTestId("map");
     await userEvent.click(map);
     await userEvent.click(map);
     await userEvent.dblClick(map);
@@ -26,7 +26,7 @@ describe("Home page", () => {
 
   test("clicking on remove button removes item", async () => {
     render(<Home />);
-    const map = screen.getByRole("map");
+    const map = await screen.findByTestId("map");
     await userEvent.click(map);
     await userEvent.click(map);
     await userEvent.dblClick(map);
