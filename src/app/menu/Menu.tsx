@@ -13,7 +13,7 @@ export function Menu({ items, onRemove }: MenuProps) {
     <nav>
       {items.map((i) => (
         <MenuItem
-          key={i.title}
+          key={i.key}
           title={i.title}
           subtitle={i.subtitle}
           onRemove={() => onRemove(i)}

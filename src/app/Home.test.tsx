@@ -23,4 +23,17 @@ describe("Home page", () => {
     expect(screen.queryAllByTestId("menu-item")).toHaveLength(1);
     expect(screen.getByTestId("menu-item")).toHaveTextContent("Route 1");
   });
+
+  test("clicking on remove button removes item", async () => {
+    render(<Home />);
+    const map = screen.getByRole("map");
+    await userEvent.click(map);
+    await userEvent.click(map);
+    await userEvent.dblClick(map);
+
+    await userEvent.click(screen.getByTestId("remove-item-button"));
+
+    expect(screen.queryAllByTestId("menu-item")).toHaveLength(0);
+    expect(screen.getByText("No records to display")).toBeVisible();
+  });
 });

@@ -1,4 +1,5 @@
 export interface MenuItemContent {
- title: string;
- subtitle: string;
+  key: string;
+  title: string;
+  subtitle: string;
 }
