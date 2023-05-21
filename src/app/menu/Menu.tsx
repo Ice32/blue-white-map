@@ -1,20 +1,20 @@
 import { MenuItem } from "@/app/menu/MenuItem";
 import { HamburgerButton } from "@/app/menu/HamburgerButton";
-import { useDispatch, useSelector } from "react-redux";
 import {
   removeMapObject,
   selectMapObjects,
   toggleSelectedState,
 } from "@/app/redux/mapSlice";
+import {
+  selectMenuOpenState,
+  toggleMenuOpenState,
+} from "@/app/redux/menuSlice";
+import { useAppDispatch, useAppSelector } from "@/app/redux/hooks";
 
-export interface MenuProps {
-  isOpen: boolean;
-  onToggle: () => void;
-}
-
-export function Menu({ isOpen, onToggle }: MenuProps) {
-  const items = useSelector(selectMapObjects);
-  const dispatch = useDispatch();
+export function Menu() {
+  const items = useAppSelector(selectMapObjects);
+  const isOpen = useAppSelector(selectMenuOpenState);
+  const dispatch = useAppDispatch();
   const navItems = (
     <>
       <div className="border-b-2 p-2 border-gray-300 ">
@@ -51,7 +51,10 @@ export function Menu({ isOpen, onToggle }: MenuProps) {
       }`}
     >
       <div className="float-right">
-        <HamburgerButton onClick={onToggle} icon={isOpen ? "x" : "hamburger"} />
+        <HamburgerButton
+          onClick={() => dispatch(toggleMenuOpenState())}
+          icon={isOpen ? "x" : "hamburger"}
+        />
       </div>
       {getContent()}
     </nav>

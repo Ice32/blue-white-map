@@ -8,14 +8,14 @@ import {
   selectMapObjects,
   toggleSelectedState,
 } from "@/app/redux/mapSlice";
-import { useDispatch, useSelector } from "react-redux";
+import { useAppDispatch, useAppSelector } from "@/app/redux/hooks";
 
 const MIN_SHAPE_POINTS = 2;
 
 export function Map() {
   const [points, setPoints] = useState([] as LatLng[]);
-  const mapObjects = useSelector(selectMapObjects);
-  const dispatch = useDispatch();
+  const mapObjects = useAppSelector(selectMapObjects);
+  const dispatch = useAppDispatch();
 
   const MapEventListener = () => {
     useMapEvents({
