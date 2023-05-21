@@ -4,8 +4,9 @@ import { MenuItem } from "@/app/menu/MenuItem";
 export interface MenuProps {
   items: MenuItemContent[];
   onRemove: (item: MenuItemContent) => void;
+  onItemClick: (item: MenuItemContent) => void;
 }
-export function Menu({ items, onRemove }: MenuProps) {
+export function Menu({ items, onRemove, onItemClick }: MenuProps) {
   if (!items.length) {
     return <p>No records to display</p>;
   }
@@ -16,7 +17,9 @@ export function Menu({ items, onRemove }: MenuProps) {
           key={i.key}
           title={i.title}
           subtitle={i.subtitle}
+          selected={i.selected}
           onRemove={() => onRemove(i)}
+          onClick={() => onItemClick(i)}
         />
       ))}
     </nav>

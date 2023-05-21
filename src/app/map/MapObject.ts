@@ -4,4 +4,5 @@ export interface MapObject {
   key: string;
   points: LatLng[];
   color: string;
+  selected: boolean;
 }

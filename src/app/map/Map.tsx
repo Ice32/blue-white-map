@@ -8,11 +8,16 @@ import { MapObject } from "@/app/map/MapObject";
 export interface MapProps {
   mapObjectCreated: (mapObject: NewMapObject) => void;
   mapObjects: MapObject[];
+  mapObjectClicked: (key: string) => void;
 }
 
 const colors = ["blue", "black", "lime", "purple", "red"];
 
-export function Map({ mapObjectCreated, mapObjects }: MapProps) {
+export function Map({
+  mapObjectCreated,
+  mapObjects,
+  mapObjectClicked,
+}: MapProps) {
   const [items, setItems] = useState([] as LatLng[]);
   const nextColorIndex = useRef(0);
 
@@ -47,8 +52,11 @@ export function Map({ mapObjectCreated, mapObjects }: MapProps) {
         {mapObjects.map((mo) => (
           <Polyline
             key={mo.key}
-            pathOptions={{ color: mo.color }}
+            pathOptions={{ color: mo.color, weight: mo.selected ? 4 : 2 }}
             positions={mo.points}
+            eventHandlers={{
+              click: () => mapObjectClicked(mo.key),
+            }}
           />
         ))}
       </MapContainer>

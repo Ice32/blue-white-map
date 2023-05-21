@@ -19,12 +19,21 @@ export default function Home() {
       points: item.points,
       key: (++objectCounter.current).toString(10),
       color: item.color,
+      selected: false,
     };
     setItems((prevItems) => [...prevItems, newObject]);
   };
 
   const mapObjectRemoved = (item: MenuItemContent) =>
     setItems((prevItems) => prevItems.filter((pi) => pi.key !== item.key));
+
+  const mapObjectSelectionToggled = (key: string) =>
+    setItems((prevItems) =>
+      prevItems.map((pi) => ({
+        ...pi,
+        selected: pi.key === key ? !pi.selected : false,
+      }))
+    );
 
   return (
     <main className="flex min-h-screen flex-row justify-between">
@@ -34,12 +43,18 @@ export default function Home() {
             key: i.key,
             title: `Route ${i.key}`,
             subtitle: "Line string",
+            selected: i.selected,
           }))}
           onRemove={mapObjectRemoved}
+          onItemClick={(i) => mapObjectSelectionToggled(i.key)}
         />
       </div>
       <div className="flex-grow min-h-fit">
-        <Map mapObjects={items} mapObjectCreated={mapObjectCreated} />
+        <Map
+          mapObjects={items}
+          mapObjectCreated={mapObjectCreated}
+          mapObjectClicked={(key) => mapObjectSelectionToggled(key)}
+        />
       </div>
     </main>
   );
