@@ -11,6 +11,7 @@ export interface MapProps {
   mapObjectClicked: (key: string) => void;
 }
 
+const MIN_SHAPE_POINTS = 2;
 const colors = ["blue", "black", "lime", "purple", "red"];
 
 export function Map({
@@ -28,6 +29,9 @@ export function Map({
         setItems((prevItems) => [...prevItems, [e.latlng.lat, e.latlng.lng]]);
       },
       dblclick: () => {
+        if (items.length < MIN_SHAPE_POINTS) {
+          return;
+        }
         mapObjectCreated({ points: items, color: getNextColor() });
         setItems([]);
       },
