@@ -1,40 +1,33 @@
-import { NewMapObject } from "@/app/map/NewMapObject";
-import React, { useRef, useState } from "react";
+import React, { useState } from "react";
 import { LatLng } from "@/app/map/LatLng";
 import { MapContainer, Polyline, TileLayer, useMapEvents } from "react-leaflet";
 import "leaflet/dist/leaflet.css";
-import { MapObject } from "@/app/map/MapObject";
 import { appConfig } from "@/app/appConfig";
-
-export interface MapProps {
-  mapObjectCreated: (mapObject: NewMapObject) => void;
-  mapObjects: MapObject[];
-  mapObjectClicked: (key: string) => void;
-}
+import {
+  createMapObject,
+  selectMapObjects,
+  toggleSelectedState,
+} from "@/app/redux/mapSlice";
+import { useDispatch, useSelector } from "react-redux";
 
 const MIN_SHAPE_POINTS = 2;
-const colors = ["blue", "black", "lime", "purple", "red"];
 
-export function Map({
-  mapObjectCreated,
-  mapObjects,
-  mapObjectClicked,
-}: MapProps) {
-  const [items, setItems] = useState([] as LatLng[]);
-  const nextColorIndex = useRef(0);
+export function Map() {
+  const [points, setPoints] = useState([] as LatLng[]);
+  const mapObjects = useSelector(selectMapObjects);
+  const dispatch = useDispatch();
 
-  const getNextColor = () => colors[++nextColorIndex.current % colors.length];
   const MapEventListener = () => {
     useMapEvents({
       click(e) {
-        setItems((prevItems) => [...prevItems, [e.latlng.lat, e.latlng.lng]]);
+        setPoints((prevItems) => [...prevItems, [e.latlng.lat, e.latlng.lng]]);
       },
       dblclick: () => {
-        if (items.length < MIN_SHAPE_POINTS) {
+        if (points.length < MIN_SHAPE_POINTS) {
           return;
         }
-        mapObjectCreated({ points: items, color: getNextColor() });
-        setItems([]);
+        dispatch(createMapObject({ points }));
+        setPoints([]);
       },
     });
     return null;
@@ -60,7 +53,7 @@ export function Map({
             pathOptions={{ color: mo.color, weight: mo.selected ? 4 : 2 }}
             positions={mo.points}
             eventHandlers={{
-              click: () => mapObjectClicked(mo.key),
+              click: () => dispatch(toggleSelectedState(mo.key)),
             }}
           />
         ))}

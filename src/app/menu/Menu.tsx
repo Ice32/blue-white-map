@@ -1,22 +1,20 @@
-import { MenuItemContent } from "@/app/menu/MenuItemContent";
 import { MenuItem } from "@/app/menu/MenuItem";
 import { HamburgerButton } from "@/app/menu/HamburgerButton";
+import { useDispatch, useSelector } from "react-redux";
+import {
+  removeMapObject,
+  selectMapObjects,
+  toggleSelectedState,
+} from "@/app/redux/mapSlice";
 
 export interface MenuProps {
-  items: MenuItemContent[];
-  onRemove: (item: MenuItemContent) => void;
-  onItemClick: (item: MenuItemContent) => void;
   isOpen: boolean;
   onToggle: () => void;
 }
 
-export function Menu({
-  items,
-  onRemove,
-  onItemClick,
-  isOpen,
-  onToggle,
-}: MenuProps) {
+export function Menu({ isOpen, onToggle }: MenuProps) {
+  const items = useSelector(selectMapObjects);
+  const dispatch = useDispatch();
   const navItems = (
     <>
       <div className="border-b-2 p-2 border-gray-300 ">
@@ -25,11 +23,11 @@ export function Menu({
       {items.map((i) => (
         <MenuItem
           key={i.key}
-          title={i.title}
-          subtitle={i.subtitle}
+          title={`Route ${i.key}`}
+          subtitle={"Line string"}
           selected={i.selected}
-          onRemove={() => onRemove(i)}
-          onClick={() => onItemClick(i)}
+          onRemove={() => dispatch(removeMapObject(i.key))}
+          onClick={() => dispatch(toggleSelectedState(i.key))}
         />
       ))}
     </>

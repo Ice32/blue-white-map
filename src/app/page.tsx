@@ -1,9 +1,6 @@
 "use client";
 import { Menu } from "@/app/menu/Menu";
-import { useRef, useState } from "react";
-import { MapObject } from "@/app/map/MapObject";
-import { NewMapObject } from "@/app/map/NewMapObject";
-import { MenuItemContent } from "@/app/menu/MenuItemContent";
+import { useState } from "react";
 import dynamic from "next/dynamic";
 
 const Map = dynamic(() => import("./map/Map").then((m) => m.Map), {
@@ -11,31 +8,7 @@ const Map = dynamic(() => import("./map/Map").then((m) => m.Map), {
 });
 
 export default function Home() {
-  const [items, setItems] = useState([] as MapObject[]);
   const [isMenuOpen, setIsMenuOpen] = useState(true);
-
-  const objectCounter = useRef(0);
-
-  const mapObjectCreated = (item: NewMapObject) => {
-    const newObject: MapObject = {
-      points: item.points,
-      key: (++objectCounter.current).toString(10),
-      color: item.color,
-      selected: false,
-    };
-    setItems((prevItems) => [...prevItems, newObject]);
-  };
-
-  const mapObjectRemoved = (item: MenuItemContent) =>
-    setItems((prevItems) => prevItems.filter((pi) => pi.key !== item.key));
-
-  const mapObjectSelectionToggled = (key: string) =>
-    setItems((prevItems) =>
-      prevItems.map((pi) => ({
-        ...pi,
-        selected: pi.key === key ? !pi.selected : false,
-      }))
-    );
 
   const removeGrayAreaOnMapSizeChange = () =>
     window.dispatchEvent(new Event("resize"));
@@ -47,25 +20,10 @@ export default function Home() {
   return (
     <main className="flex min-h-screen flex-row justify-between">
       <div className="min-h-fit">
-        <Menu
-          items={items.map((i) => ({
-            key: i.key,
-            title: `Route ${i.key}`,
-            subtitle: "Line string",
-            selected: i.selected,
-          }))}
-          onRemove={mapObjectRemoved}
-          onItemClick={(i) => mapObjectSelectionToggled(i.key)}
-          isOpen={isMenuOpen}
-          onToggle={menuToggle}
-        />
+        <Menu isOpen={isMenuOpen} onToggle={menuToggle} />
       </div>
       <div className="flex-grow min-h-fit">
-        <Map
-          mapObjects={items}
-          mapObjectCreated={mapObjectCreated}
-          mapObjectClicked={(key) => mapObjectSelectionToggled(key)}
-        />
+        <Map />
       </div>
     </main>
   );
