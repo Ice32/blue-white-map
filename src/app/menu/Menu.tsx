@@ -11,7 +11,10 @@ export function Menu({ items, onRemove, onItemClick }: MenuProps) {
     return <p>No records to display</p>;
   }
   return (
-    <nav>
+    <nav className="overflow-y-auto overflow-x-auto max-h-screen">
+      <div className="border-b-2 p-2 border-gray-300 ">
+        <h2 className="text-2xl">Items list</h2>
+      </div>
       {items.map((i) => (
         <MenuItem
           key={i.key}
