@@ -4,6 +4,7 @@ import { LatLng } from "@/app/map/LatLng";
 import { MapContainer, Polyline, TileLayer, useMapEvents } from "react-leaflet";
 import "leaflet/dist/leaflet.css";
 import { MapObject } from "@/app/map/MapObject";
+import { appConfig } from "@/app/appConfig";
 
 export interface MapProps {
   mapObjectCreated: (mapObject: NewMapObject) => void;
@@ -43,7 +44,7 @@ export function Map({
     <div role="map" style={{ height: "100%", minHeight: "100%" }}>
       <MapContainer
         style={{ height: "100%", minHeight: "100%" }}
-        center={[51.505, -0.09]}
+        center={appConfig.MAP_DEFAULT_CENTER}
         zoom={12}
         doubleClickZoom={false}
         data-testid="map"
