@@ -12,6 +12,8 @@ const Map = dynamic(() => import("./map/Map").then((m) => m.Map), {
 
 export default function Home() {
   const [items, setItems] = useState([] as MapObject[]);
+  const [isMenuOpen, setIsMenuOpen] = useState(true);
+
   const objectCounter = useRef(0);
 
   const mapObjectCreated = (item: NewMapObject) => {
@@ -35,9 +37,16 @@ export default function Home() {
       }))
     );
 
+  const removeGrayAreaOnMapSizeChange = () =>
+    window.dispatchEvent(new Event("resize"));
+  const menuToggle = () => {
+    setIsMenuOpen((prev) => !prev);
+    removeGrayAreaOnMapSizeChange();
+  };
+
   return (
     <main className="flex min-h-screen flex-row justify-between">
-      <div className="min-h-fit w-80">
+      <div className="min-h-fit">
         <Menu
           items={items.map((i) => ({
             key: i.key,
@@ -47,6 +56,8 @@ export default function Home() {
           }))}
           onRemove={mapObjectRemoved}
           onItemClick={(i) => mapObjectSelectionToggled(i.key)}
+          isOpen={isMenuOpen}
+          onToggle={menuToggle}
         />
       </div>
       <div className="flex-grow min-h-fit">
