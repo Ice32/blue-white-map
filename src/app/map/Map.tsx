@@ -1,34 +1,23 @@
-import React, { useState } from "react";
-import { LatLng } from "@/app/map/LatLng";
+import React from "react";
 import { MapContainer, Polyline, TileLayer, useMapEvents } from "react-leaflet";
 import "leaflet/dist/leaflet.css";
 import { appConfig } from "@/app/appConfig";
 import {
+  addPoint,
   createMapObject,
   selectMapObjects,
   toggleSelectedState,
 } from "@/app/redux/mapSlice";
 import { useAppDispatch, useAppSelector } from "@/app/redux/hooks";
 
-const MIN_SHAPE_POINTS = 2;
-
 export function Map() {
-  const [points, setPoints] = useState([] as LatLng[]);
   const mapObjects = useAppSelector(selectMapObjects);
   const dispatch = useAppDispatch();
 
   const MapEventListener = () => {
     useMapEvents({
-      click(e) {
-        setPoints((prevItems) => [...prevItems, [e.latlng.lat, e.latlng.lng]]);
-      },
-      dblclick: () => {
-        if (points.length < MIN_SHAPE_POINTS) {
-          return;
-        }
-        dispatch(createMapObject({ points }));
-        setPoints([]);
-      },
+      click: (e) => dispatch(addPoint([e.latlng.lat, e.latlng.lng])),
+      dblclick: () => dispatch(createMapObject()),
     });
     return null;
   };
