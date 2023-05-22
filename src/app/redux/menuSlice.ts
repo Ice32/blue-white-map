@@ -6,7 +6,7 @@ export interface MenuState {
 }
 
 const initialState: MenuState = {
-  open: false,
+  open: true,
 };
 
 const removeGrayAreaOnMapSizeChange = () =>
