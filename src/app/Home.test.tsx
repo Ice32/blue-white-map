@@ -2,26 +2,32 @@ import { render, screen } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
 import "@testing-library/jest-dom";
 import Home from "@/app/page";
-import { Providers } from "@/app/redux/Provider";
+import { LeafletMapMock } from "@/app/map/LeafletMap.mock";
+import { Provider } from "react-redux";
+import { getStore } from "@/app/redux/store";
+
+jest.mock("./map/LeafletMap", () => ({
+  __esModule: true,
+  LeafletMap: (props: any) => <LeafletMapMock {...props} />,
+}));
 
 describe("Home page", () => {
   test("displays no items in menu initially", async () => {
     render(
-      <Providers>
+      <Provider store={getStore()}>
         <Home />
-      </Providers>
+      </Provider>
     );
 
     expect(screen.queryAllByTestId("menu-item")).toHaveLength(0);
     expect(screen.getByText("No records to display")).toBeVisible();
   });
 
-  // TODO: test double clicking without initial click does nothing
   test("double clicking on the map adds menu item", async () => {
     render(
-      <Providers>
+      <Provider store={getStore()}>
         <Home />
-      </Providers>
+      </Provider>
     );
 
     const map = await screen.findByTestId("map");
@@ -35,9 +41,9 @@ describe("Home page", () => {
 
   test("clicking on remove button removes item", async () => {
     render(
-      <Providers>
+      <Provider store={getStore()}>
         <Home />
-      </Providers>
+      </Provider>
     );
     const map = await screen.findByTestId("map");
     await userEvent.click(map);
