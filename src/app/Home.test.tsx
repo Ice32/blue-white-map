@@ -2,10 +2,15 @@ import { render, screen } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
 import "@testing-library/jest-dom";
 import Home from "@/app/page";
+import { Providers } from "@/app/redux/Provider";
 
 describe("Home page", () => {
   test("displays no items in menu initially", async () => {
-    render(<Home />);
+    render(
+      <Providers>
+        <Home />
+      </Providers>
+    );
 
     expect(screen.queryAllByTestId("menu-item")).toHaveLength(0);
     expect(screen.getByText("No records to display")).toBeVisible();
@@ -13,7 +18,11 @@ describe("Home page", () => {
 
   // TODO: test double clicking without initial click does nothing
   test("double clicking on the map adds menu item", async () => {
-    render(<Home />);
+    render(
+      <Providers>
+        <Home />
+      </Providers>
+    );
 
     const map = await screen.findByTestId("map");
     await userEvent.click(map);
@@ -25,7 +34,11 @@ describe("Home page", () => {
   });
 
   test("clicking on remove button removes item", async () => {
-    render(<Home />);
+    render(
+      <Providers>
+        <Home />
+      </Providers>
+    );
     const map = await screen.findByTestId("map");
     await userEvent.click(map);
     await userEvent.click(map);
