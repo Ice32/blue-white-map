@@ -15,7 +15,7 @@ const initialState: MapState = {
 
 let objectCounter = 0;
 const colors = ["blue", "black", "lime", "purple", "red"];
-const getNextColor = () => colors[++objectCounter % colors.length];
+const getColor = (index: number) => colors[index % colors.length];
 const MIN_SHAPE_POINTS = 2;
 
 export const mapSlice = createSlice({
@@ -23,6 +23,7 @@ export const mapSlice = createSlice({
   initialState,
   reducers: {
     createMapObject(state, action: PayloadAction<void>) {
+      const objectKey = ++objectCounter;
       if (state.points.length < MIN_SHAPE_POINTS) {
         return;
       }
@@ -30,8 +31,8 @@ export const mapSlice = createSlice({
         ...state.objects,
         {
           points: state.points,
-          key: (++objectCounter).toString(10),
-          color: getNextColor(),
+          key: objectKey.toString(10),
+          color: getColor(objectKey),
           selected: false,
         },
       ];

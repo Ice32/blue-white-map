@@ -55,4 +55,25 @@ describe("Home page", () => {
     expect(screen.queryAllByTestId("menu-item")).toHaveLength(0);
     expect(screen.getByText("No records to display")).toBeVisible();
   });
+
+  test("uses correct names for map objets", async () => {
+    render(
+      <Provider store={getStore()}>
+        <Home />
+      </Provider>
+    );
+    const map = await screen.findByTestId("map");
+
+    await userEvent.click(map);
+    await userEvent.dblClick(map);
+    await userEvent.click(map);
+    await userEvent.dblClick(map);
+    await userEvent.click(map);
+    await userEvent.dblClick(map);
+
+    expect(screen.queryAllByTestId("menu-item")).toHaveLength(3);
+    expect(screen.getByText("Route 1")).toBeVisible();
+    expect(screen.getByText("Route 2")).toBeVisible();
+    expect(screen.getByText("Route 3")).toBeVisible();
+  });
 });
